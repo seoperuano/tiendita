@@ -3,10 +3,642 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tiendita Online</title>
+    <meta name="description" content="Descubre productos increíbles en Tiendita. Explora nuestro catálogo y arma tu carrito.">
+    <title>Tiendita | Tu tienda online</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #f5f6fa;
+            color: #252535;
+        }
+
+        header {
+            background: #6c4cf1;
+            color: white;
+            padding: 22px 5%;
+        }
+
+        .header-content {
+            max-width: 1200px;
+            margin: auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .logo {
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .cart-button {
+            background: white;
+            color: #6c4cf1;
+            border: none;
+            border-radius: 10px;
+            padding: 12px 18px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .hero {
+            text-align: center;
+            padding: 55px 20px;
+            background: linear-gradient(135deg, #e9e3ff, #fff);
+        }
+
+        .hero h1 {
+            font-size: clamp(28px, 5vw, 42px);
+            margin-bottom: 12px;
+        }
+
+        .hero p {
+            color: #626274;
+            font-size: 17px;
+        }
+
+        .search-container {
+            max-width: 600px;
+            margin: 25px auto 0;
+        }
+
+        .search-container input {
+            width: 100%;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 12px;
+            font-size: 16px;
+            outline-color: #6c4cf1;
+        }
+
+        main {
+            max-width: 1200px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        .section-title {
+            font-size: 26px;
+            margin-bottom: 25px;
+        }
+
+        .products {
+            display: grid;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            gap: 22px;
+        }
+
+        .product {
+            background: white;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0,0,0,.05);
+            transition: transform .2s, box-shadow .2s;
+        }
+
+        .product:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,.10);
+        }
+
+        .product img {
+            width: 100%;
+            height: 190px;
+            object-fit: cover;
+            background: #eee;
+        }
+
+        .product-info {
+            padding: 18px;
+        }
+
+        .category {
+            display: inline-block;
+            background: #eee9ff;
+            color: #6c4cf1;
+            font-size: 12px;
+            padding: 5px 9px;
+            border-radius: 20px;
+            margin-bottom: 10px;
+        }
+
+        .product h3 {
+            font-size: 18px;
+            margin-bottom: 9px;
+        }
+
+        .description {
+            color: #777;
+            font-size: 14px;
+            line-height: 1.5;
+            min-height: 42px;
+            margin-bottom: 12px;
+        }
+
+        .price {
+            font-size: 22px;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+
+        .add-button {
+            width: 100%;
+            background: #6c4cf1;
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 9px;
+            font-size: 15px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .add-button:hover {
+            background: #5436d5;
+        }
+
+        .empty-message {
+            grid-column: 1 / -1;
+            text-align: center;
+            padding: 35px;
+            color: #777;
+        }
+
+        .cart-panel {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,.5);
+            z-index: 10;
+            justify-content: center;
+            align-items: center;
+            padding: 15px;
+        }
+
+        .cart-panel.open {
+            display: flex;
+        }
+
+        .cart-content {
+            background: white;
+            width: 100%;
+            max-width: 500px;
+            max-height: 85vh;
+            overflow-y: auto;
+            border-radius: 18px;
+            padding: 25px;
+        }
+
+        .cart-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .close-button {
+            border: none;
+            background: #eee;
+            padding: 8px 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 18px;
+        }
+
+        .cart-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 10px;
+            padding: 15px 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        .cart-item p {
+            margin-top: 6px;
+            color: #666;
+            font-size: 14px;
+        }
+
+        .remove-button {
+            border: none;
+            background: #ffe8e8;
+            color: #c62828;
+            padding: 8px 10px;
+            border-radius: 7px;
+            cursor: pointer;
+        }
+
+        .cart-total {
+            display: flex;
+            justify-content: space-between;
+            font-size: 21px;
+            font-weight: bold;
+            margin: 25px 0;
+        }
+
+        .checkout-button {
+            width: 100%;
+            padding: 14px;
+            border: none;
+            border-radius: 10px;
+            background: #16a36a;
+            color: white;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .checkout-button:hover {
+            background: #118455;
+        }
+
+        .checkout-button:disabled {
+            opacity: .5;
+            cursor: not-allowed;
+        }
+
+        footer {
+            text-align: center;
+            padding: 30px 20px;
+            background: #252535;
+            color: white;
+            margin-top: 60px;
+        }
+
+        footer p {
+            margin: 5px 0;
+            color: #ddd;
+        }
+
+        @media (max-width: 900px) {
+            .products {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+        }
+
+        @media (max-width: 480px) {
+            .products {
+                gap: 12px;
+            }
+
+            .product img {
+                height: 145px;
+            }
+
+            .product-info {
+                padding: 12px;
+            }
+
+            .product h3 {
+                font-size: 16px;
+            }
+
+            .description {
+                font-size: 13px;
+            }
+
+            .price {
+                font-size: 19px;
+            }
+
+            .logo {
+                font-size: 24px;
+            }
+        }
+    </style>
 </head>
+
 <body>
-    <h1>¡Bienvenido a Tiendita! 🛍️</h1>
-    <p>Tu tienda virtual está en construcción.</p>
+
+<header>
+    <div class="header-content">
+        <div class="logo">🛍️ Tiendita</div>
+
+        <button class="cart-button" onclick="toggleCart(true)">
+            🛒 Carrito (<span id="cart-count">0</span>)
+        </button>
+    </div>
+</header>
+
+<section class="hero">
+    <h1>Encuentra algo que te encante ✨</h1>
+    <p>Explora nuestros productos y descubre tus favoritos.</p>
+
+    <div class="search-container">
+        <input
+            type="search"
+            id="search"
+            placeholder="🔍 Buscar productos..."
+            aria-label="Buscar productos"
+        >
+    </div>
+</section>
+
+<main>
+    <h2 class="section-title">Nuestros productos</h2>
+
+    <section class="products" id="products"></section>
+</main>
+
+<div
+    class="cart-panel"
+    id="cart-panel"
+    role="dialog"
+    aria-modal="true"
+    aria-label="Carrito de compras"
+    onclick="if(event.target === this) toggleCart(false)"
+>
+    <div class="cart-content">
+        <div class="cart-header">
+            <h2>🛒 Tu carrito</h2>
+            <button
+                class="close-button"
+                onclick="toggleCart(false)"
+                aria-label="Cerrar carrito"
+            >✕</button>
+        </div>
+
+        <div id="cart-items"></div>
+
+        <div class="cart-total">
+            <span>Total:</span>
+            <span id="cart-total">S/ 0.00</span>
+        </div>
+
+        <button
+            class="checkout-button"
+            id="checkout-button"
+            onclick="checkout()"
+            disabled
+        >
+            Realizar pedido
+        </button>
+
+        <p style="margin-top:12px; color:#777; font-size:13px; text-align:center;">
+            Demo: todavía no se realizan pagos ni se envían pedidos.
+        </p>
+    </div>
+</div>
+
+<footer>
+    <h3>🛍️ Tiendita</h3>
+    <p>Tu próxima compra favorita comienza aquí.</p>
+    <p>© <span id="year"></span> Tiendita. Todos los derechos reservados.</p>
+</footer>
+
+<script>
+    const products = [
+        {
+            id: 1,
+            name: "Zapatillas Urbanas",
+            category: "Calzado",
+            price: 129.90,
+            description: "Comodidad y estilo para todos los días.",
+            image: "https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=600&q=80"
+        },
+        {
+            id: 2,
+            name: "Reloj Elegante",
+            category: "Accesorios",
+            price: 89.90,
+            description: "Un toque elegante para cualquier ocasión.",
+            image: "https://images.unsplash.com/photo-1524805444758-089113d48a6d?auto=format&fit=crop&w=600&q=80"
+        },
+        {
+            id: 3,
+            name: "Mochila Moderna",
+            category: "Accesorios",
+            price: 74.90,
+            description: "Ideal para estudiar, trabajar o viajar.",
+            image: "https://images.unsplash.com/photo-1553062407-98eeb64c6a62?auto=format&fit=crop&w=600&q=80"
+        },
+        {
+            id: 4,
+            name: "Audífonos Inalámbricos",
+            category: "Tecnología",
+            price: 99.90,
+            description: "Disfruta tu música donde quieras.",
+            image: "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&w=600&q=80"
+        },
+        {
+            id: 5,
+            name: "Lentes de Sol",
+            category: "Accesorios",
+            price: 49.90,
+            description: "Un diseño moderno para completar tu look.",
+            image: "https://images.unsplash.com/photo-1511499767150-a48a237f0083?auto=format&fit=crop&w=600&q=80"
+        },
+        {
+            id: 6,
+            name: "Cámara Fotográfica",
+            category: "Tecnología",
+            price: 249.90,
+            description: "Captura tus momentos favoritos.",
+            image: "https://images.unsplash.com/photo-1516035069371-29a1b244cc32?auto=format&fit=crop&w=600&q=80"
+        },
+        {
+            id: 7,
+            name: "Polo Casual",
+            category: "Ropa",
+            price: 39.90,
+            description: "Una prenda cómoda para todos los días.",
+            image: "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?auto=format&fit=crop&w=600&q=80"
+        },
+        {
+            id: 8,
+            name: "Perfume Clásico",
+            category: "Belleza",
+            price: 119.90,
+            description: "Una fragancia para dejar huella.",
+            image: "https://images.unsplash.com/photo-1541643600914-78b084683601?auto=format&fit=crop&w=600&q=80"
+        }
+    ];
+
+    let cart = JSON.parse(localStorage.getItem("tiendita-cart") || "[]");
+
+    function money(amount) {
+        return "S/ " + amount.toFixed(2);
+    }
+
+    function renderProducts() {
+        const container = document.getElementById("products");
+        const query = document.getElementById("search").value
+            .trim()
+            .toLowerCase();
+
+        const filtered = products.filter(product =>
+            product.name.toLowerCase().includes(query) ||
+            product.category.toLowerCase().includes(query) ||
+            product.description.toLowerCase().includes(query)
+        );
+
+        if (filtered.length === 0) {
+            container.innerHTML =
+                '<p class="empty-message">No encontramos productos con esa búsqueda.</p>';
+            return;
+        }
+
+        container.innerHTML = filtered.map(product => `
+            <article class="product">
+                <img
+                    src="${product.image}"
+                    alt="${product.name}"
+                    loading="lazy"
+                    onerror="this.onerror=null;this.src='https://placehold.co/600x400?text=Producto';"
+                >
+
+                <div class="product-info">
+                    <span class="category">${product.category}</span>
+                    <h3>${product.name}</h3>
+                    <p class="description">${product.description}</p>
+                    <p class="price">${money(product.price)}</p>
+
+                    <button
+                        class="add-button"
+                        onclick="addToCart(${product.id})"
+                    >
+                        Añadir al carrito
+                    </button>
+                </div>
+            </article>
+        `).join("");
+    }
+
+    function saveCart() {
+        localStorage.setItem("tiendita-cart", JSON.stringify(cart));
+        renderCart();
+    }
+
+    function addToCart(id) {
+        const product = products.find(item => item.id === id);
+        if (!product) return;
+
+        const item = cart.find(item => item.id === id);
+
+        if (item) {
+            item.quantity++;
+        } else {
+            cart.push({
+                id: product.id,
+                name: product.name,
+                price: product.price,
+                quantity: 1
+            });
+        }
+
+        saveCart();
+
+        const button = document.querySelector(".cart-button");
+        button.textContent = "✓ Añadido";
+
+        setTimeout(() => {
+            button.innerHTML =
+                '🛒 Carrito (<span id="cart-count">' +
+                cart.reduce((sum, item) => sum + item.quantity, 0) +
+                '</span>)';
+        }, 900);
+    }
+
+    function removeFromCart(id) {
+        cart = cart.filter(item => item.id !== id);
+        saveCart();
+    }
+
+    function changeQuantity(id, amount) {
+        const item = cart.find(item => item.id === id);
+        if (!item) return;
+
+        item.quantity += amount;
+
+        if (item.quantity <= 0) {
+            removeFromCart(id);
+        } else {
+            saveCart();
+        }
+    }
+
+    function renderCart() {
+        const container = document.getElementById("cart-items");
+        const count = cart.reduce((sum, item) => sum + item.quantity, 0);
+        const total = cart.reduce(
+            (sum, item) => sum + item.price * item.quantity,
+            0
+        );
+
+        document.getElementById("cart-count").textContent = count;
+        document.getElementById("cart-total").textContent = money(total);
+        document.getElementById("checkout-button").disabled = cart.length === 0;
+
+        if (cart.length === 0) {
+            container.innerHTML =
+                '<p class="empty-message">Tu carrito está vacío. ¡Explora nuestros productos!</p>';
+            return;
+        }
+
+        container.innerHTML = cart.map(item => `
+            <div class="cart-item">
+                <div>
+                    <strong>${item.name}</strong>
+                    <p>${money(item.price)} cada uno</p>
+
+                    <div style="display:flex; align-items:center; gap:12px; margin-top:10px;">
+                        <button
+                            class="close-button"
+                            onclick="changeQuantity(${item.id}, -1)"
+                            aria-label="Reducir cantidad"
+                        >−</button>
+
+                        <span>${item.quantity}</span>
+
+                        <button
+                            class="close-button"
+                            onclick="changeQuantity(${item.id}, 1)"
+                            aria-label="Aumentar cantidad"
+                        >+</button>
+                    </div>
+                </div>
+
+                <button
+                    class="remove-button"
+                    onclick="removeFromCart(${item.id})"
+                >
+                    Eliminar
+                </button>
+            </div>
+        `).join("");
+    }
+
+    function toggleCart(open) {
+        document.getElementById("cart-panel").classList.toggle("open", open);
+    }
+
+    function checkout() {
+        if (cart.length === 0) return;
+
+        alert(
+            "¡Gracias por visitar Tiendita! 🛍️\n\n" +
+            "Esta es una demostración. Todavía debemos implementar " +
+            "el registro de pedidos en el servidor."
+        );
+    }
+
+    document.getElementById("search").addEventListener("input", renderProducts);
+    document.getElementById("year").textContent = new Date().getFullYear();
+
+    renderProducts();
+    renderCart();
+</script>
+
 </body>
 </html>
