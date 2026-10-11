@@ -411,6 +411,7 @@ async function loadProducts() {
     }
 
     products = await response.json();
+    console.log("Productos recibidos:", products); 
     renderProducts();
   } catch (error) {
     console.error("Error:", error);
