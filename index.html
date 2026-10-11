@@ -416,7 +416,7 @@ async function loadProducts() {
     console.error("Error:", error);
   }
 }
-
+    loadProducts();
 
     let cart = JSON.parse(localStorage.getItem("tiendita-cart") || "[]");
 
