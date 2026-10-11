@@ -411,7 +411,6 @@ async function loadProducts() {
     }
 
     products = await response.json();
-    console.log("Productos recibidos:", products); 
     renderProducts();
   } catch (error) {
     console.error("Error:", error);
@@ -425,49 +424,46 @@ async function loadProducts() {
         return "S/ " + amount.toFixed(2);
     }
 
-    function renderProducts() {
-        const container = document.getElementById("products");
-        const query = document.getElementById("search").value
-            .trim()
-            .toLowerCase();
+function renderProducts() {
+    const container = document.getElementById("products");
+    const search = document.getElementById("search");
+    const query = (search?.value || "").trim().toLowerCase();
 
-        const filtered = products.filter(product =>
-            product.name.toLowerCase().includes(query) ||
-            product.category.toLowerCase().includes(query) ||
-            product.description.toLowerCase().includes(query)
-        );
+    const filtered = products.filter(product =>
+        (product.name || "").toLowerCase().includes(query) ||
+        (product.category || "").toLowerCase().includes(query) ||
+        (product.description || "").toLowerCase().includes(query)
+    );
 
-        if (filtered.length === 0) {
-            container.innerHTML =
-                '<p class="empty-message">No encontramos productos con esa búsqueda.</p>';
-            return;
-        }
-
-        container.innerHTML = filtered.map(product => `
-            <article class="product">
-                <img
-                    src="${product.image}"
-                    alt="${product.name}"
-                    loading="lazy"
-                    onerror="this.onerror=null;this.src='https://placehold.co/600x400?text=Producto';"
-                >
-
-                <div class="product-info">
-                    <span class="category">${product.category}</span>
-                    <h3>${product.name}</h3>
-                    <p class="description">${product.description}</p>
-                    <p class="price">${money(product.price)}</p>
-
-                    <button
-                        class="add-button"
-                        onclick="addToCart(${product.id})"
-                    >
-                        Añadir al carrito
-                    </button>
-                </div>
-            </article>
-        `).join("");
+    if (filtered.length === 0) {
+        container.innerHTML =
+            '<p class="empty-message">No encontramos productos con esa búsqueda.</p>';
+        return;
     }
+
+    container.innerHTML = filtered.map(product => `
+        <article class="product">
+            <img
+                src="${product.image || 'https://placehold.co/600x400?text=Producto'}"
+                alt="${product.name || 'Producto'}"
+                loading="lazy"
+                onerror="this.onerror=null;this.src='https://placehold.co/600x400?text=Producto';"
+            >
+            <div class="product-info">
+                <span class="category">${product.category || 'General'}</span>
+                <h3>${product.name || 'Producto'}</h3>
+                <p class="description">${product.description || ''}</p>
+                <p class="price">${money(product.price)}</p>
+                <button
+                    class="add-button"
+                    onclick="addToCart(${product.id})"
+                >
+                    Añadir al carrito
+                </button>
+            </div>
+        </article>
+    `).join("");
+}
 
     function saveCart() {
         localStorage.setItem("tiendita-cart", JSON.stringify(cart));
