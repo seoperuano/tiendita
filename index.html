@@ -398,72 +398,25 @@
 </footer>
 
 <script>
-    const products = [
-        {
-            id: 1,
-            name: "Zapatillas Urbanas",
-            category: "Calzado",
-            price: 129.90,
-            description: "Comodidad y estilo para todos los días.",
-            image: "https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=600&q=80"
-        },
-        {
-            id: 2,
-            name: "Reloj Elegante",
-            category: "Accesorios",
-            price: 89.90,
-            description: "Un toque elegante para cualquier ocasión.",
-            image: "https://images.unsplash.com/photo-1524805444758-089113d48a6d?auto=format&fit=crop&w=600&q=80"
-        },
-        {
-            id: 3,
-            name: "Mochila Moderna",
-            category: "Accesorios",
-            price: 74.90,
-            description: "Ideal para estudiar, trabajar o viajar.",
-            image: "https://images.unsplash.com/photo-1553062407-98eeb64c6a62?auto=format&fit=crop&w=600&q=80"
-        },
-        {
-            id: 4,
-            name: "Audífonos Inalámbricos",
-            category: "Tecnología",
-            price: 99.90,
-            description: "Disfruta tu música donde quieras.",
-            image: "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&w=600&q=80"
-        },
-        {
-            id: 5,
-            name: "Lentes de Sol",
-            category: "Accesorios",
-            price: 49.90,
-            description: "Un diseño moderno para completar tu look.",
-            image: "https://images.unsplash.com/photo-1511499767150-a48a237f0083?auto=format&fit=crop&w=600&q=80"
-        },
-        {
-            id: 6,
-            name: "Cámara Fotográfica",
-            category: "Tecnología",
-            price: 249.90,
-            description: "Captura tus momentos favoritos.",
-            image: "https://images.unsplash.com/photo-1516035069371-29a1b244cc32?auto=format&fit=crop&w=600&q=80"
-        },
-        {
-            id: 7,
-            name: "Polo Casual",
-            category: "Ropa",
-            price: 39.90,
-            description: "Una prenda cómoda para todos los días.",
-            image: "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?auto=format&fit=crop&w=600&q=80"
-        },
-        {
-            id: 8,
-            name: "Perfume Clásico",
-            category: "Belleza",
-            price: 119.90,
-            description: "Una fragancia para dejar huella.",
-            image: "https://images.unsplash.com/photo-1541643600914-78b084683601?auto=format&fit=crop&w=600&q=80"
-        }
-    ];
+    let products = [];
+
+async function loadProducts() {
+  try {
+    const response = await fetch(
+      "https://tiendita-api.seoperuano.workers.dev/api/products"
+    );
+
+    if (!response.ok) {
+      throw new Error("Error al cargar productos");
+    }
+
+    products = await response.json();
+    renderProducts();
+  } catch (error) {
+    console.error("Error:", error);
+  }
+}
+
 
     let cart = JSON.parse(localStorage.getItem("tiendita-cart") || "[]");
 
